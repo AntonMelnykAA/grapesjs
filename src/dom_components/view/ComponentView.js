@@ -106,13 +106,6 @@ export default Backbone.View.extend({
     views.splice(views.indexOf(view), 1);
     view.removed(view._clbObj());
     view.$el.data({ model: '', collection: '', view: '' });
-    delete view.model;
-    delete view.$el;
-    delete view.el.__gjsv;
-    delete view.childrenView;
-    delete view.scriptContainer;
-    delete view.opts;
-    // delete view.el;
     return view;
   },
 
@@ -517,8 +510,8 @@ export default Backbone.View.extend({
   onAttrUpdate() {},
 
   render() {
-    this.renderAttributes();
     if (this.modelOpt.temporary) return this;
+    this.renderAttributes();
     this.renderChildren();
     this.updateScript();
     setViewEl(this.el, this);
