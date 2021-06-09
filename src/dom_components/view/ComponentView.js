@@ -510,8 +510,8 @@ export default Backbone.View.extend({
   onAttrUpdate() {},
 
   render() {
-    if (this.modelOpt.temporary) return this;
     this.renderAttributes();
+    if (this.modelOpt.temporary) return this;
     this.renderChildren();
     this.updateScript();
     setViewEl(this.el, this);
