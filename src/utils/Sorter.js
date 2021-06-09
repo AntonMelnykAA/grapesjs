@@ -1121,12 +1121,14 @@ export default Backbone.View.extend({
         const viewActive = activeTextModel.getView();
         activeTextModel.trigger('active');
         const { activeRte } = viewActive;
-        const modelEl = model.getEl();
+
         delete model.opt.temporary;
-        model.getView().render();
+        model.getView().model && model.getView().render();
+        const modelEl = model.getEl();
         modelEl.setAttribute('data-gjs-textable', 'true');
-        const { outerHTML } = modelEl;
-        activeRte.insertHTML && activeRte.insertHTML(outerHTML);
+        const elem =
+          typeof modelToDrop == 'string' ? modelToDrop : srcEl.outerHTML;
+        activeRte.insertHTML && activeRte.insertHTML(elem);
       } else {
         created = targetCollection.add(modelToDrop, opts);
       }
