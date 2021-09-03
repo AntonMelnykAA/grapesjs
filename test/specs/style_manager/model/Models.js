@@ -880,7 +880,7 @@ describe('PropertyFactory', () => {
         {
           property: 'border-style',
           type: 'select',
-          defaults: 'solid',
+          defaults: 'none',
           list: [
             { value: 'none' },
             { value: 'solid' },

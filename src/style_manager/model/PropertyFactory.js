@@ -278,7 +278,7 @@ export default () => ({
           obj.defaults = 'left';
           break;
         case 'border-style':
-          obj.defaults = 'solid';
+          obj.defaults = 'none';
           break;
         case 'box-shadow-type':
           obj.defaults = '';
