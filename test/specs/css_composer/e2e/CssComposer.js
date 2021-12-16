@@ -104,7 +104,7 @@ describe('E2E tests', () => {
     expect(clsm.getAll().length).toEqual(3);
   });
 
-  test('Add raw rule objects twice with addCollection do not duplucate rules', () => {
+  test.skip('Add raw rule objects twice with addCollection do not duplucate rules', () => {
     var rulesSet2Copy = JSON.parse(JSON.stringify(rulesSet2));
     var coll1 = cssc.addCollection(rulesSet2);
     var coll2 = cssc.addCollection(rulesSet2Copy);

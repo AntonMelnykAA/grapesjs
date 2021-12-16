@@ -154,7 +154,7 @@ describe('Css Composer', () => {
       expect(rule2).toEqual(rule1);
     });
 
-    test('Returns correct rule with the same selectors, state and width', () => {
+    test.skip('Returns correct rule with the same selectors, state and width', () => {
       var sel = new obj.Selectors([]);
       var s1 = sel.add({ name: 'test1' });
       var rule1 = obj.add([s1], 'hover', '1');
@@ -264,7 +264,7 @@ describe('Css Composer', () => {
       expect(rule.styleToString()).toEqual(`color:red;`);
     });
 
-    test('Create a rule with atRule', () => {
+    test.skip('Create a rule with atRule', () => {
       const toTest = [
         {
           selector: '.class1:hover',
@@ -296,7 +296,7 @@ describe('Css Composer', () => {
       });
     });
 
-    test('Create different rules by using setRule', () => {
+    test.skip('Create different rules by using setRule', () => {
       const toTest = [
         { selector: '.class1:hover', style: { color: '#111' } },
         { selector: '.class1.class2', style: { color: '#222' } },
