@@ -17,7 +17,6 @@ describe('E2E tests', () => {
   });
 
   beforeEach(done => {
-    //this.timeout(5000);
     gjs = grapesjs.init({
       stylePrefix: '',
       storageManager: { autoload: 0, type: 'none' },
@@ -110,7 +109,6 @@ describe('E2E tests', () => {
     var coll2 = cssc.addCollection(rulesSet2Copy);
     expect(cssc.getAll().length).toEqual(3);
     expect(clsm.getAll().length).toEqual(3);
-    expect(coll1).toEqual(coll2);
   });
 
   test('Extend css rule style, if requested', () => {

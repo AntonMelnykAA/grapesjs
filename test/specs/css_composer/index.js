@@ -1,8 +1,4 @@
-import Models from './model/CssModels';
-import CssRuleView from './view/CssRuleView';
-import CssRulesView from './view/CssRulesView';
 import CssComposer from 'css_composer';
-import e2e from './e2e/CssComposer';
 import utils from './../../test_utils.js';
 import Editor from 'editor/model/Editor';
 
@@ -32,6 +28,12 @@ describe('Css Composer', () => {
       config.em = editorModel;
     };
 
+    const getCSS = obj =>
+      obj
+        .getAll()
+        .map(r => r.toCSS())
+        .join('');
+
     beforeEach(() => {
       em = new Editor({});
       config = { em };
@@ -39,7 +41,7 @@ describe('Css Composer', () => {
     });
 
     afterEach(() => {
-      obj = null;
+      em.destroy();
     });
 
     test('Object exists', () => {
