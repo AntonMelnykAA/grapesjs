@@ -26,7 +26,7 @@ export default {
       })
       .getModel()
       .once('change:open', () => editor.stopCommand(this.id));
-    this.htmlEditor.setContent(editor.getHtml());
+    this.htmlEditor.setContent(editor.getWrapper().getEl().innerHTML);
     this.cssEditor.setContent(editor.getCss());
   },
 
