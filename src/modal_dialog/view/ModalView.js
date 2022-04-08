@@ -17,7 +17,8 @@ export default Backbone.View.extend({
 
   events: {
     click: 'onClick',
-    'click [data-close-modal]': 'hide'
+    'click [data-close-modal]': 'hide',
+    keydown: 'onKeydown'
   },
 
   initialize(o) {
@@ -32,11 +33,15 @@ export default Backbone.View.extend({
     this.listenTo(model, 'change:content', this.updateContent);
   },
 
-  onClick(e) {
+  onKeydown(e) {
     const bkd = this.config.backdrop;
     if (e.keyCode === 27) {
       bkd && e.target === this.el && this.hide();
     }
+  },
+
+  onClick(e) {
+    const bkd = this.config.backdrop;
     bkd && e.target === this.el && this.hide();
   },
 
