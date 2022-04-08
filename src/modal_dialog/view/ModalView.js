@@ -5,7 +5,7 @@ export default Backbone.View.extend({
     return `<div class="${pfx}dialog ${ppfx}one-bg ${ppfx}two-color">
       <div class="${pfx}header">
         <div class="${pfx}title">${title}</div>
-        <div onkeydown="" class="${pfx}btn-close" data-close-modal>&Cross;</div>
+        <div class="${pfx}btn-close" data-close-modal>&Cross;</div>
       </div>
       <div class="${pfx}content">
         <div id="${pfx}c">${content}</div>
@@ -17,9 +17,7 @@ export default Backbone.View.extend({
 
   events: {
     click: 'onClick',
-    'click [data-close-modal]': 'hide',
-    keydown: 'onkeydown',
-    'keydown [data-close-modal]': 'hide'
+    'click [data-close-modal]': 'hide'
   },
 
   initialize(o) {
@@ -36,6 +34,9 @@ export default Backbone.View.extend({
 
   onClick(e) {
     const bkd = this.config.backdrop;
+    if (e.keyCode === 27) {
+      bkd && e.target === this.el && this.hide();
+    }
     bkd && e.target === this.el && this.hide();
   },
 
