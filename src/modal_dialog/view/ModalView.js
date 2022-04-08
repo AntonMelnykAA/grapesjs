@@ -18,7 +18,8 @@ export default Backbone.View.extend({
   events: {
     click: 'onClick',
     'click [data-close-modal]': 'hide',
-    keydown: 'onKeydown'
+    keydown: 'onKeydown',
+    'keydown [data-close-modal]': 'hide'
   },
 
   initialize(o) {
