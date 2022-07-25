@@ -227,7 +227,7 @@ export default class PropertyFactory {
       ],
       ['font-family', { default: 'Arial, Helvetica, sans-serif', options: this.optsFonts }, 'display'],
       ['font-weight', { default: '400', options: this.optsWeight }, 'display'],
-      ['border-style', { default: 'solid', options: this.optsBorderStyle }, 'display'],
+      ['border-style', { default: 'none', options: this.optsBorderStyle }, 'display'],
       ['box-shadow-type', { default: '', options: this.optsShadowType }, 'display'],
       ['background-repeat', { default: 'repeat', options: this.optsBgRepeat }, 'display'],
       ['background-position', { default: 'left top', options: this.optsBgPos }, 'display'],

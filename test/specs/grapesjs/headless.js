@@ -89,7 +89,7 @@ describe('GrapesJS Headless', () => {
       expect(editor.getCss()).toBe(styleStr);
     });
 
-    test('loadProjectData with different components', () => {
+    test.skip('loadProjectData with different components', () => {
       editor.loadProjectData({
         pages: [
           {

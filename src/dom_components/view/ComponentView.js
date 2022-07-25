@@ -493,8 +493,8 @@ export default class ComponentView extends Backbone.View {
   onAttrUpdate() {}
 
   render() {
-    this.renderAttributes();
     if (this.modelOpt.temporary) return this;
+    this.renderAttributes();
     this.renderChildren();
     this.updateScript();
     setViewEl(this.el, this);

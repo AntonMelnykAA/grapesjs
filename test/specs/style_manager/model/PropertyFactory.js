@@ -528,12 +528,13 @@ describe('PropertyFactory', () => {
           units: obj.unitsSizeNoPerc,
           default: '0',
           min: 0,
+          fixedValues: undefined,
         },
         {
           property: 'border-style',
           id: 'border-style-sub',
           type: 'select',
-          default: 'solid',
+          default: 'none',
           options: [
             { id: 'none' },
             { id: 'solid' },
