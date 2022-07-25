@@ -1,9 +1,5 @@
 import Editor from 'editor';
-import {
-  keySymbol,
-  keySymbols,
-  keySymbolOvrd
-} from 'dom_components/model/Component';
+import { keySymbol, keySymbols, keySymbolOvrd } from 'dom_components/model/Component';
 
 describe('Symbols', () => {
   let editor;
@@ -20,7 +16,7 @@ describe('Symbols', () => {
   };
   const simpleCompDef = {
     type: 'text',
-    components: [{ type: 'textnode', content: 'Component' }]
+    components: [{ type: 'textnode', content: 'Component' }],
   };
   const simpleComp = '<div data-a="b">Component</div>';
   const simpleComp2 = '<div data-b="c">Component 3</div>';
@@ -31,6 +27,13 @@ describe('Symbols', () => {
 
   let allInst, all, comp, symbol, compInitChild;
   let secComp, secSymbol;
+  const toHTML = cmp =>
+    cmp.toHTML({
+      attributes: (m, attr) => {
+        delete attr.id;
+        return attr;
+      },
+    });
   const getUm = cmp => cmp.em.get('UndoManager');
   const getInnerComp = (cmp, i = 0) => cmp.components().at(i);
   const getFirstInnSymbol = cmp => getInnerComp(cmp).__getSymbol();
@@ -42,22 +45,13 @@ describe('Symbols', () => {
     cFrom.components(`New text content ${rand}`);
     const toAttr = cTo.getAttributes();
     delete toAttr.id;
-    const htmlOpts = {
-      attributes: (m, attr) => {
-        delete attr.id;
-        return attr;
-      }
-    };
     expect(toAttr).toEqual(newAttr);
-    expect(cFrom.toHTML(htmlOpts)).toBe(cTo.toHTML(htmlOpts));
+    expect(toHTML(cFrom)).toBe(toHTML(cTo));
   };
 
   beforeAll(() => {
     editor = new Editor({ symbols: 1 });
-    editor
-      .getModel()
-      .get('PageManager')
-      .onLoad();
+    editor.getModel().get('PageManager').onLoad();
     wrapper = editor.getWrapper();
   });
 
@@ -89,7 +83,7 @@ describe('Symbols', () => {
     expect(comp.__getSymbol()).toBe(symbol);
     expect(symbs.length).toBe(1);
     expect(symbs[0]).toBe(comp);
-    expect(comp.toHTML()).toBe(symbol.toHTML());
+    expect(toHTML(comp)).toBe(toHTML(symbol));
   });
 
   test('Create 1 symbol and clone the instance for another one', () => {
@@ -101,7 +95,7 @@ describe('Symbols', () => {
     expect(symbs[0]).toBe(comp);
     expect(symbs[1]).toBe(comp2);
     expect(comp2.__getSymbol()).toBe(symbol);
-    expect(comp2.toHTML()).toBe(symbol.toHTML());
+    expect(toHTML(comp2)).toBe(toHTML(symbol));
   });
 
   test('Create 1 symbol and clone it to have another instance', () => {
@@ -113,7 +107,7 @@ describe('Symbols', () => {
     expect(symbs[0]).toBe(comp);
     expect(symbs[1]).toBe(comp2);
     expect(comp2.__getSymbol()).toBe(symbol);
-    expect(comp2.toHTML()).toBe(symbol.toHTML());
+    expect(toHTML(comp2)).toBe(toHTML(symbol));
   });
 
   test('Symbols and instances are correctly serialized', () => {
@@ -147,12 +141,12 @@ describe('Symbols', () => {
     const defComp = {
       ...simpleCompDef,
       [keySymbol]: idSymb,
-      attributes: { id: idComp }
+      attributes: { id: idComp },
     };
     const defSymb = {
       ...simpleCompDef,
       [keySymbols]: [idComp],
-      attributes: { id: idSymb }
+      attributes: { id: idSymb },
     };
     const [comp, symbol] = wrapper.append([defComp, defSymb]);
     expect(comp.__getSymbol()).toBe(symbol);
@@ -192,14 +186,7 @@ describe('Symbols', () => {
     const addedSymb = added.__getSymbol();
     const symbAdded = symbol.components().at(0);
     expect(addedSymb).toBe(symbAdded);
-    allInst.forEach(cmp =>
-      expect(
-        cmp
-          .components()
-          .at(0)
-          .__getSymbol()
-      ).toBe(symbAdded)
-    );
+    allInst.forEach(cmp => expect(cmp.components().at(0).__getSymbol()).toBe(symbAdded));
     // The new main Symbol should keep the track of all instances
     expect(symbAdded.__getSymbols().length).toBe(allInst.length);
   });
@@ -246,9 +233,7 @@ describe('Symbols', () => {
 
     test('Adding a new component to a symbol, it will be propogated to all instances', () => {
       const added = symbol.append(simpleComp, { at: 0 })[0];
-      all.forEach(cmp =>
-        expect(cmp.components().length).toBe(compInitChild + 1)
-      );
+      all.forEach(cmp => expect(cmp.components().length).toBe(compInitChild + 1));
       // Check symbol references
       expect(added.__getSymbols().length).toBe(allInst.length);
       allInst.forEach(cmp => expect(getFirstInnSymbol(cmp)).toBe(added));
@@ -256,9 +241,7 @@ describe('Symbols', () => {
 
     test('Adding a new component to an instance of the symbol, it will be propogated to all symbols', () => {
       const added = comp.append(simpleComp, { at: 0 })[0];
-      all.forEach(cmp =>
-        expect(cmp.components().length).toBe(compInitChild + 1)
-      );
+      all.forEach(cmp => expect(cmp.components().length).toBe(compInitChild + 1));
       // Check symbol references
       const addSymb = added.__getSymbol();
       expect(symbol.components().at(0)).toBe(addSymb);
@@ -273,9 +256,7 @@ describe('Symbols', () => {
       um.redo();
       um.undo();
       um.redo(); // check multiple undo/redo
-      all.forEach(cmp =>
-        expect(cmp.components().length).toBe(compInitChild + 1)
-      );
+      all.forEach(cmp => expect(cmp.components().length).toBe(compInitChild + 1));
       // Check symbol references
       const addSymbs = added.__getSymbol().__getSymbols();
       expect(addSymbs.length).toBe(allInst.length);
@@ -354,8 +335,8 @@ describe('Symbols', () => {
         expect(attrs[attrKey2]).toBe(attrValue2);
       });
       // All symbols still have the same HTML
-      const symbHtml = symbol.toHTML();
-      all.forEach(cmp => expect(cmp.toHTML()).toBe(symbHtml));
+      const symbHtml = toHTML(symbol);
+      all.forEach(cmp => expect(toHTML(cmp)).toBe(symbHtml));
     });
 
     test('Cloning a component in an instance, reflects changes to all symbols', () => {
@@ -394,22 +375,14 @@ describe('Symbols', () => {
         expect(symbol.__getSymbToUp({ changed: 'anything' }).length).toBe(0);
         // With override as an array with props, changed option will count
         symbol.set(keySymbolOvrd, ['components']);
-        expect(symbol.__getSymbToUp({ changed: 'anything' }).length).toBe(
-          allInst.length
-        );
+        expect(symbol.__getSymbToUp({ changed: 'anything' }).length).toBe(allInst.length);
         symbol.set(keySymbolOvrd, ['components']);
         expect(symbol.__getSymbToUp({ changed: 'components' }).length).toBe(0);
-        expect(
-          symbol.__getSymbToUp({ changed: 'components:reset' }).length
-        ).toBe(0);
+        expect(symbol.__getSymbToUp({ changed: 'components:reset' }).length).toBe(0);
         // Support also overrides with type of actions
         symbol.set(keySymbolOvrd, ['components:change']); // specific change
-        expect(symbol.__getSymbToUp({ changed: 'components' }).length).toBe(
-          allInst.length
-        );
-        expect(
-          symbol.__getSymbToUp({ changed: 'components:change' }).length
-        ).toBe(0);
+        expect(symbol.__getSymbToUp({ changed: 'components' }).length).toBe(allInst.length);
+        expect(symbol.__getSymbToUp({ changed: 'components:change' }).length).toBe(0);
       });
 
       test('Symbol is not propagating props data if override is set', () => {
@@ -468,43 +441,27 @@ describe('Symbols', () => {
         symbol.components('Test text');
         // The symbol has changed, but istances should remain the same
         expect(symbol.components().length).toBe(1);
-        allInst.forEach(cmp => expect(cmp.toHTML()).toBe(comp.toHTML()));
-        allInst.forEach(cmp =>
-          expect(cmp.components().length).toBe(innCompsLen)
-        );
+        allInst.forEach(cmp => expect(toHTML(cmp)).toBe(toHTML(comp)));
+        allInst.forEach(cmp => expect(cmp.components().length).toBe(innCompsLen));
         // Check for add action
         symbol.append('<div>B</div><div>C</div>');
         expect(symbol.components().length).toBe(3);
-        allInst.forEach(cmp =>
-          expect(cmp.components().length).toBe(innCompsLen)
-        );
+        allInst.forEach(cmp => expect(cmp.components().length).toBe(innCompsLen));
       });
 
       test('Symbol is not removing components data if override is set', () => {
         symbol.set(keySymbolOvrd, ['components']);
         const innCompsLen = symbol.components().length;
-        symbol
-          .components()
-          .at(0)
-          .remove();
+        symbol.components().at(0).remove();
         expect(symbol.components().length).toBe(innCompsLen - 1);
-        allInst.forEach(cmp =>
-          expect(cmp.components().length).toBe(innCompsLen)
-        );
+        allInst.forEach(cmp => expect(cmp.components().length).toBe(innCompsLen));
       });
 
       test('Symbol is not propagating remove on instances with ovverride', () => {
         comp.set(keySymbolOvrd, ['components']);
         const innCompsLen = symbol.components().length;
-        symbol
-          .components()
-          .at(0)
-          .remove();
-        all.forEach(cmp =>
-          expect(cmp.components().length).toBe(
-            cmp === comp ? innCompsLen : innCompsLen - 1
-          )
-        );
+        symbol.components().at(0).remove();
+        all.forEach(cmp => expect(cmp.components().length).toBe(cmp === comp ? innCompsLen : innCompsLen - 1));
       });
 
       test('On symbol components update, those having override are ignored', () => {
@@ -529,10 +486,7 @@ describe('Symbols', () => {
         all.forEach(cmp => expect(cmp.components().length).toBe(2));
 
         // Check remove action
-        symbol
-          .components()
-          .at(0)
-          .remove();
+        symbol.components().at(0).remove();
         all.forEach(cmp => {
           expect(cmp.components().length).toBe(cmp === comp ? 2 : 1);
         });
@@ -564,7 +518,7 @@ describe('Symbols', () => {
       expect(secComp.__getSymbol()).toBe(secSymbol);
       expect(symbs.length).toBe(1);
       expect(symbs[0]).toBe(secComp);
-      expect(secComp.toHTML()).toBe(secSymbol.toHTML());
+      expect(toHTML(secComp)).toBe(toHTML(secSymbol));
     });
 
     test('Adding the instance, of the second symbol, inside the first symbol, propagates correctly to all first instances', () => {
@@ -578,9 +532,7 @@ describe('Symbols', () => {
       const secInstans = secSymbol.__getSymbols();
       expect(secInstans.length).toBe(all.length);
       // All instances still refer to the second symbol
-      secInstans.forEach(secInst =>
-        expect(secInst.__getSymbol()).toBe(secSymbol)
-      );
+      secInstans.forEach(secInst => expect(secInst.__getSymbol()).toBe(secSymbol));
     });
 
     test('Adding the instance, of the second symbol, inside one of the first instances, propagates correctly to all first symbols', () => {
@@ -593,9 +545,7 @@ describe('Symbols', () => {
       const secInstans = secSymbol.__getSymbols();
       expect(secInstans.length).toBe(all.length);
       // All instances still refer to the second symbol
-      secInstans.forEach(secInst =>
-        expect(secInst.__getSymbol()).toBe(secSymbol)
-      );
+      secInstans.forEach(secInst => expect(secInst.__getSymbol()).toBe(secSymbol));
     });
 
     test('Adding the instance, of the second symbol, inside one of the first instances, and then removing it, will not affect second instances outside', () => {

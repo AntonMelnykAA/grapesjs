@@ -27,90 +27,26 @@ const pageManager = editor.Pages;
 
 ## Available Events
 
--   `page:add` - Added new page. The page is passed as an argument to the callback
--   `page:remove` - Page removed. The page is passed as an argument to the callback
--   `page:select` - New page selected. The newly selected page and the previous one, are passed as arguments to the callback
--   `page:update` - Page updated. The updated page and the object containing changes are passed as arguments to the callback
--   `page` - Catch-all event for all the events mentioned above. An object containing all the available data about the triggered event is passed as an argument to the callback
+*   `page:add` - Added new page. The page is passed as an argument to the callback
+*   `page:remove` - Page removed. The page is passed as an argument to the callback
+*   `page:select` - New page selected. The newly selected page and the previous one, are passed as arguments to the callback
+*   `page:update` - Page updated. The updated page and the object containing changes are passed as arguments to the callback
+*   `page` - Catch-all event for all the events mentioned above. An object containing all the available data about the triggered event is passed as an argument to the callback
 
 ## Methods
 
--   [add][1]
--   [get][2]
--   [getAll][3]
--   [getMain][4]
--   [remove][5]
--   [select][6]
--   [getSelected][7]
+*   [add][1]
+*   [get][2]
+*   [getAll][3]
+*   [getAllWrappers][4]
+*   [getMain][5]
+*   [remove][6]
+*   [select][7]
+*   [getSelected][8]
 
-## add
+[Page]: page.html
 
-Add new page
-
-### Parameters
-
--   `props` **[Object][8]** Page properties
--   `opts` **[Object][8]?** Options (optional, default `{}`)
-
-### Examples
-
-```javascript
-const newPage = pageManager.add({
- id: 'new-page-id', // without an explicit ID, a random one will be created
- styles: `.my-class { color: red }`, // or a JSON of styles
- component: '<div class="my-class">My element</div>', // or a JSON of components
-});
-```
-
-Returns **Page** 
-
-## remove
-
-Remove page
-
-### Parameters
-
--   `page` **([String][9] | Page)** Page or page id
--   `opts`   (optional, default `{}`)
-
-### Examples
-
-```javascript
-const removedPage = pageManager.remove('page-id');
-// or by passing the page
-const somePage = pageManager.get('page-id');
-pageManager.remove(somePage);
-```
-
-Returns **Page** 
-
-## get
-
-Get page by id
-
-### Parameters
-
--   `id` **[String][9]** Page id
-
-### Examples
-
-```javascript
-const somePage = pageManager.get('page-id');
-```
-
-Returns **Page** 
-
-## getMain
-
-Get main page (the first one available)
-
-### Examples
-
-```javascript
-const mainPage = pageManager.getMain();
-```
-
-Returns **Page** 
+[Component]: component.html
 
 ## getAll
 
@@ -122,7 +58,90 @@ Get all pages
 const arrayOfPages = pageManager.getAll();
 ```
 
-Returns **[Array][10]&lt;Page>** 
+Returns **[Array][9]<[Page]>** 
+
+## add
+
+Add new page
+
+### Parameters
+
+*   `props` **[Object][10]** Page properties
+*   `opts` **[Object][10]?** Options (optional, default `{}`)
+
+### Examples
+
+```javascript
+const newPage = pageManager.add({
+ id: 'new-page-id', // without an explicit ID, a random one will be created
+ styles: `.my-class { color: red }`, // or a JSON of styles
+ component: '<div class="my-class">My element</div>', // or a JSON of components
+});
+```
+
+Returns **[Page]** 
+
+## remove
+
+Remove page
+
+### Parameters
+
+*   `page` **([String][11] | [Page])** Page or page id
+*   `opts` **any**  (optional, default `{}`)
+
+### Examples
+
+```javascript
+const removedPage = pageManager.remove('page-id');
+// or by passing the page
+const somePage = pageManager.get('page-id');
+pageManager.remove(somePage);
+```
+
+Returns **[Page]** Removed Page
+
+## get
+
+Get page by id
+
+### Parameters
+
+*   `id` **[String][11]** Page id
+
+### Examples
+
+```javascript
+const somePage = pageManager.get('page-id');
+```
+
+Returns **[Page]** 
+
+## getMain
+
+Get main page (the first one available)
+
+### Examples
+
+```javascript
+const mainPage = pageManager.getMain();
+```
+
+Returns **[Page]** 
+
+## getAllWrappers
+
+Get wrapper components (aka body) from all pages and frames.
+
+### Examples
+
+```javascript
+const wrappers = pageManager.getAllWrappers();
+// Get all `image` components from the project
+const allImages = wrappers.map(wrp => wrp.findType('image')).flat();
+```
+
+Returns **[Array][9]<[Component]>** 
 
 ## select
 
@@ -130,8 +149,8 @@ Change the selected page. This will switch the page rendered in canvas
 
 ### Parameters
 
--   `page` **([String][9] | Page)** Page or page id
--   `opts`   (optional, default `{}`)
+*   `page` **([String][11] | [Page])** Page or page id
+*   `opts`   (optional, default `{}`)
 
 ### Examples
 
@@ -154,7 +173,7 @@ Get the selected page
 const selectedPage = pageManager.getSelected();
 ```
 
-Returns **Page** 
+Returns **[Page]** 
 
 [1]: #add
 
@@ -162,16 +181,18 @@ Returns **Page**
 
 [3]: #getall
 
-[4]: #getmain
+[4]: #getallwrappers
 
-[5]: #remove
+[5]: #getmain
 
-[6]: #select
+[6]: #remove
 
-[7]: #getselected
+[7]: #select
 
-[8]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
+[8]: #getselected
 
-[9]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
+[9]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
 
-[10]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
+[10]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
+
+[11]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String

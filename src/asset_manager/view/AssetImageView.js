@@ -1,58 +1,56 @@
 import { isFunction } from 'underscore';
 import AssetView from './AssetView';
+import html from '../../utils/html';
 
-export default AssetView.extend({
-  events: {
-    'click [data-toggle=asset-remove]': 'onRemove',
-    click: 'onClick',
-    dblclick: 'onDblClick'
-  },
-
+export default class AssetImageView extends AssetView {
   getPreview() {
-    const pfx = this.pfx;
-    const src = this.model.get('src');
-    return `
+    const { pfx, ppfx, model } = this;
+    const src = model.get('src');
+    return html`
       <div class="${pfx}preview" style="background-image: url('${src}');"></div>
-      <div class="${pfx}preview-bg ${this.ppfx}checker-bg"></div>
+      <div class="${pfx}preview-bg ${ppfx}checker-bg"></div>
     `;
-  },
+  }
 
   getInfo() {
-    const pfx = this.pfx;
-    const model = this.model;
+    const { pfx, model } = this;
     let name = model.get('name');
     let width = model.get('width');
     let height = model.get('height');
     let unit = model.get('unitDim');
     let dim = width && height ? `${width}x${height}${unit}` : '';
     name = name || model.getFilename();
-    return `
+    return html`
       <div class="${pfx}name">${name}</div>
       <div class="${pfx}dimensions">${dim}</div>
     `;
-  },
+  }
 
   init(o) {
     const pfx = this.pfx;
     this.className += ` ${pfx}asset-image`;
-  },
+  }
 
   /**
    * Triggered when the asset is clicked
    * @private
    * */
   onClick() {
-    var onClick = this.config.onClick;
-    var model = this.model;
-    this.collection.trigger('deselectAll');
-    this.$el.addClass(this.pfx + 'highlight');
+    const { model, pfx } = this;
+    const { select } = this.__getBhv();
+    const { onClick } = this.config;
+    const coll = this.collection;
+    coll.trigger('deselectAll');
+    this.$el.addClass(pfx + 'highlight');
 
-    if (isFunction(onClick)) {
+    if (isFunction(select)) {
+      select(model, false);
+    } else if (isFunction(onClick)) {
       onClick(model);
     } else {
-      this.updateTarget(this.collection.target);
+      this.updateTarget(coll.target);
     }
-  },
+  }
 
   /**
    * Triggered when the asset is double clicked
@@ -60,18 +58,20 @@ export default AssetView.extend({
    * */
   onDblClick() {
     const { em, model } = this;
-    const onDblClick = this.config.onDblClick;
+    const { select } = this.__getBhv();
+    const { onDblClick } = this.config;
+    const { target, onSelect } = this.collection;
 
-    if (isFunction(onDblClick)) {
+    if (isFunction(select)) {
+      select(model, true);
+    } else if (isFunction(onDblClick)) {
       onDblClick(model);
     } else {
-      this.updateTarget(this.collection.target);
+      this.updateTarget(target);
       em && em.get('Modal').close();
     }
-
-    var onSelect = this.collection.onSelect;
     isFunction(onSelect) && onSelect(model);
-  },
+  }
 
   /**
    * Remove asset from collection
@@ -81,4 +81,10 @@ export default AssetView.extend({
     e.stopImmediatePropagation();
     this.model.collection.remove(this.model);
   }
-});
+}
+
+AssetImageView.prototype.events = {
+  'click [data-toggle=asset-remove]': 'onRemove',
+  click: 'onClick',
+  dblclick: 'onDblClick',
+};

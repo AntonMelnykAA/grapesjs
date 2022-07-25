@@ -1,9 +1,9 @@
 /* stylelint-disable */
-@import "spectrum-colorpicker/spectrum";
+@use 'sass:math';
 @import "codemirror/lib/codemirror";
 @import "codemirror/theme/hopscotch";
 
-
+@import "spectrum.scss";
 @import "gjs_variables.scss";
 
 
@@ -351,7 +351,7 @@ $colorsAll: (one, $primaryColor),
 	outline: 3px solid $colorYell;
 	outline-offset: -3px;
 	text-align: center;
-	font-size: $imageCompDim/3;
+	font-size: math.div($imageCompDim, 3);
 	cursor: pointer;
 
   	&.fa-picture-o::after{
