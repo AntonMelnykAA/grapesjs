@@ -1,7 +1,7 @@
 {
   "name": "grapesjs",
   "description": "Free and Open Source Web Builder Framework",
-  "version": "0.16.51",
+  "version": "0.16.52",
   "author": "Artur Arseniev",
   "license": "BSD-3-Clause",
   "homepage": "http://grapesjs.com",
@@ -18,7 +18,6 @@
   "dependencies": {
     "backbone": "1.3.3",
     "backbone-undo": "^0.2.5",
-    "cash-dom": "^2.3.9",
     "codemirror": "^5.58.2",
     "codemirror-formatting": "^1.0.0",
     "keymaster": "^1.6.2",
@@ -94,10 +93,7 @@
     ],
     "setupFiles": [
       "<rootDir>/test/setup.js"
-    ],
-    "moduleNameMapper": {
-      "^jquery$": "cash-dom"
-    }
+    ]
   },
   "husky": {
     "hooks": {

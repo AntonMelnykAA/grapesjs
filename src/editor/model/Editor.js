@@ -7,7 +7,7 @@ import {
   keys,
   bindAll
 } from 'underscore';
-import $ from 'cash-dom';
+import $ from '../../utils/cash-dom';
 import Backbone from 'backbone';
 import Extender from 'utils/extender';
 import { getModel } from 'utils/mixins';

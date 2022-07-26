@@ -1,4 +1,4 @@
-import $ from 'cash-dom';
+import $ from './utils/cash-dom';
 import Editor from './editor';
 import { isElement, isFunction } from 'underscore';
 import polyfills from 'utils/polyfills';

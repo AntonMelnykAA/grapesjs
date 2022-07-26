@@ -108,7 +108,7 @@
  *
  * @module Editor
  */
-import $ from 'cash-dom';
+import $ from '../utils/cash-dom';
 import defaults from './config/config';
 import EditorModel from './model/Editor';
 import EditorView from './view/EditorView';
