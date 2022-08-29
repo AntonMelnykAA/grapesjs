@@ -26,8 +26,7 @@ export default {
       })
       .getModel()
       .once('change:open', () => editor.stopCommand(this.id));
-    let { optsHtml } = config;
-    this.htmlEditor.setContent(editor.getHtml(optsHtml));
+    this.htmlEditor.setContent(editor.getWrapper().getEl().innerHTML);
     this.cssEditor.setContent(editor.getCss());
   },
 
